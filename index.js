@@ -10,14 +10,21 @@ const addCardBtn = document.getElementById("add-card")
 const clearBtn = document.getElementById("clear")
 const addContainer = document.getElementById("add-container")
 
+
+// Show add container
+showBtn.addEventListener("click", () =>  addContainer.classList.add("show"))
+// Hide add container
+hideBtn.addEventListener("click", () =>  addContainer.classList.remove("show"))
+
+
 // Keep track of current card
 let currentActiveCard = 0
 
 // Store DOM cards
 const cardsEl = []
 
-// Store card data
-const cardsData = [
+
+/**const cardsData = [
   {
     question: "What must a variable begin?",
     answer: "A letter, $ or _"
@@ -31,10 +38,7 @@ const cardsData = [
     answer: "thisIsAVariable"
   },
 ]
-// Create all cards
-const createCards = () => {
-  cardsData.forEach((data, index) => createCard(data, index) )
-}
+**/
 
 // Create a single card in DOM
 const createCard = (data, index) => {
@@ -69,7 +73,26 @@ const updateCurrentText = () => {
   currentEl.innerText = `${ currentActiveCard +1 }/${cardsEl.length}`
 }
 
+
+
+// Get Cards from local storage
+const getCardsData = () => {
+  const cards = JSON.parse(localStorage.getItem("cards"))
+  return cards === null ? [] : cards
+}
+// Store card data
+const cardsData = getCardsData()
+// Create all cards
+const createCards = () => {
+  cardsData.forEach((data, index) => createCard(data, index) )
+}
 createCards()
+
+// Add card to local storage
+const setCardsData = (cards) => {
+localStorage.setItem("cards", JSON.stringify(cards))
+window.location.reload()
+}
 
 // Event Listeners
 // Next
@@ -92,4 +115,27 @@ prevBtn.addEventListener("click", () => {
   }
 cardsEl[currentActiveCard].className = "card active"
 updateCurrentText()
+})
+// Add new Card
+addCardBtn.addEventListener("click", () => {
+  const question = questionEl.value
+  const answer = answerEl.value
+  if(question.trim() && answer.trim()) {
+    const newCard = {question: question, answer: answer}
+    createCard(newCard)
+
+    questionEl.value = ""
+    answerEl.value = ""
+
+    addContainer.classList.remove("show")
+
+    cardsData.push(newCard)
+    setCardsData(cardsData)
+  }
+})
+// Clear all cards button
+clearBtn.addEventListener("click", ()=> {
+  localStorage.clear()
+  cardsContainer.innerHTML = ""
+  window.location.reload()
 })

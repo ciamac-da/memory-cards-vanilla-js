@@ -79,6 +79,10 @@ h1 button {
  transform: translateX(-50%) rotateY(10deg);
 }
 
+.card.right {
+ transform: translateX(100%) rotateY(10deg);
+}
+
 .card.show-answer .inner-card {
 transform: rotateX(180deg);
 }
