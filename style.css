@@ -138,6 +138,10 @@ transform: rotateX(0deg);
   cursor: pointer;
   font-size: 16px;
   padding: 5px;
+  display: flex;
+}
+.hide {
+  display: none;
 }
 
 .navigation p {
